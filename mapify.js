@@ -42,7 +42,7 @@ export class EzMap {
     let allStateSettings = this.activeSettings.mainSettings
 
     if ( activeStates.includes(name) ) {
-      let currentStateSettings = this.activeSettings.states[name]
+      // let currentStateSettings = this.activeSettings.states[name]
 
       setAttrs(el, {
         fill: allStateSettings.stateColor,
@@ -50,9 +50,9 @@ export class EzMap {
         strokeWidth: allStateSettings.strokeWidth,
       })
 
-      el.addEventListener('click', event => this.createFragmentLink(event, currentStateSettings))
-      el.addEventListener('mouseover', event => this.handleFragmentHover(event, el))
-      el.addEventListener('mouseout', event => this.handleFragmentHover(event, el))
+      // el.addEventListener('click', event => this.createFragmentLink(event, currentStateSettings))
+      // el.addEventListener('mouseover', event => this.handleFragmentHover(event, el))
+      // el.addEventListener('mouseout', event => this.handleFragmentHover(event, el))
     } else {
       setAttrs(el, {
         fill: this.mainSettings.stateColor,
@@ -64,7 +64,8 @@ export class EzMap {
     setAttrs(el, {
       strokeLinejoin: 'round',
       transform: 'matrix(1,0,0,1,0,0)',
-      dataLabel: this.metaData[name].name,
+      dataName: this.metaData[name].name,
+      dataLabel: 'tbd',
       d: path,
     })
 
@@ -74,6 +75,7 @@ export class EzMap {
   }
 
   configureMapFragments() {
+
   }
 
   initMap() {
