@@ -6,6 +6,8 @@ export class EzMap {
   ns = 'http://www.w3.org/2000/svg'
   xmls = 'http://www.w3.org/2000/svg'
   svgNode = document.createElementNS(this.ns, 'svg')
+  activeFragments = []
+  inactiveFragments = []
 
   constructor(mapWrapper, mapConfig) {
     this.wrapper = mapWrapper
@@ -32,6 +34,16 @@ export class EzMap {
       let path = val
   
       const mapFragment = this.createMapFragment(fragment, identifier, name, path)
+
+      this.inactiveFragments.forEach(fragment => {
+        fragment.addEventListener('click', event => window.location.href = this.mainSettings.url)
+        fragment.addEventListener('mouseover', event => {
+          this.inactiveFragments.forEach(frag => frag.style.fill = this.mainSettings.stateHoverColor)
+        })
+        fragment.addEventListener('mouseout', event => {
+          this.inactiveFragments.forEach(frag => frag.style.fill = '')
+        })
+      })
   
       this.svgNode.appendChild(mapFragment)
     }
@@ -42,7 +54,7 @@ export class EzMap {
     let allStateSettings = this.activeSettings.mainSettings
 
     if ( activeStates.includes(name) ) {
-      // let currentStateSettings = this.activeSettings.states[name]
+      let currentStateSettings = this.activeSettings.states[name]
 
       setAttrs(el, {
         fill: allStateSettings.stateColor,
@@ -50,32 +62,36 @@ export class EzMap {
         strokeWidth: allStateSettings.strokeWidth,
       })
 
-      // el.addEventListener('click', event => this.createFragmentLink(event, currentStateSettings))
-      // el.addEventListener('mouseover', event => this.handleFragmentHover(event, el))
-      // el.addEventListener('mouseout', event => this.handleFragmentHover(event, el))
+      this.activeFragments.push(el)
+
+      el.addEventListener('click', event => this.createFragmentLink(event, currentStateSettings.url))
+      el.addEventListener('mouseover', event => this.handleFragmentHover(event, el, this.activeSettings))
+      el.addEventListener('mouseout', event => this.handleFragmentHover(event, el))
     } else {
       setAttrs(el, {
         fill: this.mainSettings.stateColor,
         stroke: this.mainSettings.strokeColor,
         strokeWidth: this.mainSettings.strokeWidth,
       })
+      this.inactiveFragments.push(el)
     }
 
     setAttrs(el, {
       strokeLinejoin: 'round',
       transform: 'matrix(1,0,0,1,0,0)',
       dataName: this.metaData[name].name,
-      dataLabel: 'tbd',
+      dataLabel: name,
       d: path,
     })
 
     el.classList.add(...classNames)
-  
+    
     return el
   }
 
   configureMapFragments() {
-
+    const allFragments = this.svgNode.querySelectorAll('path')
+    
   }
 
   initMap() {
@@ -87,10 +103,10 @@ export class EzMap {
     window.location.href = config
   }
 
-  handleFragmentHover(event, el) {
+  handleFragmentHover(event, el, config) {
     if ( event.type === 'mouseover' ) {
       addStyles(el, {
-        fill: this.activeSettings.mainSettings.stateHoverColor,
+        fill: config.mainSettings.stateHoverColor,
       })
     }
     if ( event.type === 'mouseout' ) {

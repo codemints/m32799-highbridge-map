@@ -15,7 +15,7 @@ export const mapData = {
     strokeWidth: '2',
     strokeHoverWidth: '3',
     labelColor: 'white',
-    pathURL: 'https://www.google.com',
+    url: 'https://www.google.com',
   },
   activePaths: {
     mainSettings: {
@@ -25,6 +25,7 @@ export const mapData = {
       strokeHoverColor: '#ffffff',
       strokeWidth: '2',
       strokeHoverWidth: '2',
+      labelColor: 'white',
     },
     states: {
       MN: {
