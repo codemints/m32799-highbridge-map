@@ -24,7 +24,7 @@ export const mapData = {
       strokeColor: '#ffffff',
       strokeHoverColor: '#ffffff',
       strokeWidth: '2',
-      strokeHoverWidth: '3',
+      strokeHoverWidth: '2',
     },
     states: {
       MN: {

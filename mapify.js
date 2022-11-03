@@ -1,5 +1,5 @@
 import { setAttrs, addStyles, defaultConfig, createConfig } from './utils.js'
-import { mapPaths } from './maps.js'
+import { mapData } from './maps.js'
 
 export class EzMap {
   vers = '1.1'
@@ -12,8 +12,8 @@ export class EzMap {
     this.mapConfig = mapConfig
     this.mainSettings = mapConfig.mainSettings
     this.activeSettings = mapConfig.activePaths
-    this.pathArray = Object.entries(mapPaths[this.mapConfig.mainSettings.mapShell].USPaths)
-    this.pathMetadata = Object.entries(mapPaths[this.mapConfig.mainSettings.mapShell].USMetadata)
+    this.metaData = mapData[this.mapConfig.mainSettings.mapShell].USMetadata
+    this.pathArray = Object.entries(mapData[this.mapConfig.mainSettings.mapShell].USPaths)
     this.initMap()
   }
 
@@ -40,7 +40,6 @@ export class EzMap {
   createMapFragment(el, classNames, name, path) {
     let activeStates = Object.keys(this.activeSettings.states)
     let allStateSettings = this.activeSettings.mainSettings
-    console.log(name)
 
     if ( activeStates.includes(name) ) {
       let currentStateSettings = this.activeSettings.states[name]
@@ -50,6 +49,10 @@ export class EzMap {
         stroke: allStateSettings.strokeColor,
         strokeWidth: allStateSettings.strokeWidth,
       })
+
+      el.addEventListener('click', event => this.createFragmentLink(event, currentStateSettings))
+      el.addEventListener('mouseover', event => this.handleFragmentHover(event, el))
+      el.addEventListener('mouseout', event => this.handleFragmentHover(event, el))
     } else {
       setAttrs(el, {
         fill: this.mainSettings.stateColor,
@@ -61,7 +64,8 @@ export class EzMap {
     setAttrs(el, {
       strokeLinejoin: 'round',
       transform: 'matrix(1,0,0,1,0,0)',
-      d: path
+      dataLabel: this.metaData[name].name,
+      d: path,
     })
 
     el.classList.add(...classNames)
@@ -70,7 +74,6 @@ export class EzMap {
   }
 
   configureMapFragments() {
-    
   }
 
   initMap() {
