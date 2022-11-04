@@ -53,7 +53,7 @@ export class EzMap {
     return statePath;
   }
 
-  setAttrsAndListeners(state, statePath) {
+  generateTheme(a) {
     const {
       mainSettings: {
         stateColor: activeStateColor,
@@ -69,12 +69,22 @@ export class EzMap {
       strokeWidth: inactiveStrokeWidth,
     } = this.mainSettings;
 
-    const a = this.isStateActive(state);
+    return {
+      stateColor: a ? activeStateColor : inactiveStateColor,
+      strokeColor: a ? activeStrokeColor : inactiveStrokeColor,
+      strokeWidth: a ? activeStrokeWidth : inactiveStrokeWidth,
+    };
+  }
+
+  setAttrsAndListeners(state, statePath) {
+    const { stateColor, strokeColor, strokeWidth } = this.generateTheme(
+      this.isStateActive(state)
+    );
 
     setAttrs(statePath, {
-      fill: a ? activeStateColor : inactiveStateColor,
-      stroke: a ? activeStrokeColor : inactiveStrokeColor,
-      strokeWidth: a ? activeStrokeWidth : inactiveStrokeWidth,
+      fill: stateColor,
+      stroke: strokeColor,
+      strokeWidth: strokeWidth,
     });
 
     if (a) {
