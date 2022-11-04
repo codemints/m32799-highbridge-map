@@ -14,6 +14,8 @@ export class EzMap {
     this.mainSettings = mapConfig.mainSettings;
     this.activeSettings = mapConfig.activePaths.mainSettings;
     this.activePaths = mapConfig.activePaths;
+    this.activeStates = [];
+    this.inactiveStates = [];
     this.activeStatesList = Object.keys(mapConfig.activePaths.states);
     this.inactiveStatesList = Object.keys(
       mapData[this.mainSettings.mapShell]
