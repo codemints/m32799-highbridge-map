@@ -14,7 +14,10 @@ export class EzMap {
     this.mapConfig = mapConfig
     this.mainSettings = mapConfig.mainSettings
     this.activeSettings = mapConfig.activePaths
+    this.activeStates = Object.keys(this.activeSettings.states)
     this.metaData = mapData[this.mapConfig.mainSettings.mapShell].USMetadata
+    this.hoverInactive = this.mainSettings.hoverInactive
+    this.hoverInactiveAsRegion = this.mainSettings.hoverInactiveAsRegion
     this.pathArray = Object.entries(mapData[this.mapConfig.mainSettings.mapShell].USPaths)
     this.initMap()
   }
@@ -26,7 +29,7 @@ export class EzMap {
       height: this.mainSettings.mapHeight,
       width: this.mainSettings.mapWidth
     })
-      
+
     for ( const [key, val] of this.pathArray) {
       let fragment = document.createElementNS(this.ns, 'path')
       let identifier = ['em__state', `em__state--${key}`]
@@ -35,38 +38,43 @@ export class EzMap {
   
       const mapFragment = this.createMapFragment(fragment, identifier, name, path)
 
-      this.inactiveFragments.forEach(fragment => {
-        fragment.addEventListener('click', event => window.location.href = this.mainSettings.url)
-        fragment.addEventListener('mouseover', event => {
-          this.inactiveFragments.forEach(frag => frag.style.fill = this.mainSettings.stateHoverColor)
-        })
-        fragment.addEventListener('mouseout', event => {
-          this.inactiveFragments.forEach(frag => frag.style.fill = '')
-        })
-      })
-  
       this.svgNode.appendChild(mapFragment)
     }
+    
+    const allPaths = this.svgNode.querySelectorAll('path')
+    allPaths.forEach(path => {
+
+    })
+
+    //loop through activeFragments
+    //check activeSettings
+    //is showLabel true?
+    //yes: create text elements and place them over the states
+    //no: move on
+    //check activeSettings
+    //is showDescription true?
+    //yes: create DOM element to hold description
+    //set mouseover event listener on active states
+    //get pointer x & y coords
+    //use coords to position description DOM element
+    //no: move on
+    //set mouseover and mouseout event listeners to handle hover color change
+    //set click event listener to handle url navigation
+
+    //loop thorugh inactiveFragments
+    //same process as above, except how they hover will depend on the hoverActive and hoverInactiveAsRegion properties in mainSettings
   }
 
   createMapFragment(el, classNames, name, path) {
-    let activeStates = Object.keys(this.activeSettings.states)
-    let allStateSettings = this.activeSettings.mainSettings
-
-    if ( activeStates.includes(name) ) {
-      let currentStateSettings = this.activeSettings.states[name]
+    if ( this.activeStates.includes(name) ) {
 
       setAttrs(el, {
-        fill: allStateSettings.stateColor,
-        stroke: allStateSettings.strokeColor,
-        strokeWidth: allStateSettings.strokeWidth,
+        fill: this.activeSettings.mainSettings.stateColor,
+        stroke: this.activeSettings.mainSettings.strokeColor,
+        strokeWidth: this.activeSettings.mainSettings.strokeWidth,
       })
 
       this.activeFragments.push(el)
-
-      el.addEventListener('click', event => this.createFragmentLink(event, currentStateSettings.url))
-      el.addEventListener('mouseover', event => this.handleFragmentHover(event, el, this.activeSettings))
-      el.addEventListener('mouseout', event => this.handleFragmentHover(event, el))
     } else {
       setAttrs(el, {
         fill: this.mainSettings.stateColor,
@@ -90,8 +98,7 @@ export class EzMap {
   }
 
   configureMapFragments() {
-    const allFragments = this.svgNode.querySelectorAll('path')
-    
+    console.log(this.hoverInactive, this.hoverInactiveAsRegion)
   }
 
   initMap() {

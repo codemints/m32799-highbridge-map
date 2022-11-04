@@ -2,6 +2,7 @@ const baseColor = '#000C2F'
 const activeColor = '#A52170'
 const activeHoverColor = '#FCB61A'
 const baseHoverColor = '#0199AD'
+const baseHoverAlt = '#f2f2f2'
 
 export const mapData = {
   mainSettings: {
@@ -14,8 +15,12 @@ export const mapData = {
     strokeHoverColor: '#ffffff',
     strokeWidth: '2',
     strokeHoverWidth: '3',
+    showLabel: false,
+    showDescription: false,
     labelColor: 'white',
     url: 'https://www.google.com',
+    hoverInactive: true,
+    hoverInactiveAsRegion: true,
   },
   activePaths: {
     mainSettings: {
@@ -25,6 +30,8 @@ export const mapData = {
       strokeHoverColor: '#ffffff',
       strokeWidth: '2',
       strokeHoverWidth: '2',
+      showLabel: true,
+      showDescription: true,
       labelColor: 'white',
     },
     states: {
