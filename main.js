@@ -1,6 +1,6 @@
-import './main.css'
-import { EzMap } from './mapify.js'
-import { mapData } from './config.js'
+import "./main.css";
+import { EzMap } from "./mapify.js";
+import config from "./config";
 
-const parNode = document.getElementById('app')
-new EzMap(parNode, mapData)
+const entryNode = document.getElementById("app");
+new EzMap(entryNode, config).initMap();
